@@ -1,19 +1,6 @@
-#include<GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include<iostream>
 
 #include"Game.h"
-
-
-
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-}
-
 
 
 int main(void)
