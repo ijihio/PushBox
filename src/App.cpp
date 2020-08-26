@@ -1,10 +1,18 @@
 #include<iostream>
-
+#include<Windows.h>
 #include"Game.h"
 
 
 int main(void)
 {
+    std::cout << "-------------------------------------------" << std::endl;
+    std::cout << "use [up][down][right][left] to control " << std::endl;
+    std::cout << "[r] to reset " << std::endl;
+    std::cout << "[page up] and [page down] to switch level" << std::endl;
+    std::cout << "[backspace] to go back to previous step " << std::endl;
+    std::cout << "-------------------------------------------" << std::endl;
+
+
     GLFWwindow* window;
 
     
@@ -33,7 +41,7 @@ int main(void)
     GLenum err = glewInit();
     if (GLEW_OK != err)
         std::cout << "err" << std::endl;
-    std::cout << glGetString(GL_VERSION) << std::endl;
+   // std::cout << glGetString(GL_VERSION) << std::endl;
    
     Game game("res/map/", "res/texture/bmp/", "res/shader/App.shader", 1);
     game.Init();
@@ -51,6 +59,11 @@ int main(void)
 
             glfwSwapBuffers(window);
             glfwPollEvents();
+            if(game.IsPass())
+                 MessageBox(NULL, TEXT("passed,next level?"), TEXT("info"), 1);
+
+
+
         }
     glfwTerminate();
     return 0;

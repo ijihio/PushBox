@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 const int Game::DirX[4]{ 0,0,-1,1 };
 const int Game::DirY[4]{  1,-1,0,0};
 
@@ -61,6 +62,7 @@ void Game::Init()
 	m_Shader->SetUniform1iv("u_Textures", TexIndex, 10);
 	m_Shader->SetUniformMat4f("u_MVP", proj);
 	
+	Step.push(UP);
 }
 
 float* Game::GetVB()
@@ -141,6 +143,29 @@ void Game::DrawMap()
 	m_Renderer->Clear(0.1f, 0.4f, 0.5f, 1.0f);
 	m_Renderer->Draw(*m_VA, *m_IB, *m_Shader);
 
+	
+
+
+	if (IsPass())
+	{
+	
+		if (m_Level < MaxLevel)
+		{
+			m_Level += 1;
+
+			delete m_Map;
+			delete m_MiniMap;//int型的map数组
+			delete m_OriginMiniMap;
+
+			m_Map = new Map(m_MapPath, m_Level);
+			m_MiniMap = m_Map->GetMiniMap();
+			m_OriginMiniMap = m_Map->GetMiniMap();
+		}
+
+
+	}
+	
+
 }
 
 bool Game::IsPass()
@@ -158,23 +183,7 @@ bool Game::IsPass()
 	}
 	if (p == 0)
 	{
-
 		
-		if(m_Level<MaxLevel)
-		{ 
-			m_Level += 1;
-
-			delete m_Map;
-			delete m_MiniMap;//int型的map数组
-			delete m_OriginMiniMap;
-
-			m_Map = new Map(m_MapPath, m_Level);
-			m_MiniMap = m_Map->GetMiniMap();
-			m_OriginMiniMap = m_Map->GetMiniMap();
-		}
-
-		
-
 		return true;
 	}
 }
@@ -190,27 +199,34 @@ void Game::SpecialKeys(int key,int action)
 		return;
 	switch (key) {
 
+
+	case GLFW_KEY_R:
+
+		delete m_MiniMap;
+		m_MiniMap=m_Map->GetMiniMap();
+		break;
+
 	case GLFW_KEY_ESCAPE:
 		exit(0);
 		break;
 	case GLFW_KEY_BACKSPACE:
-		if(Step.size()>4)
+		if(Step.size()>3)
 		{ 
 			int cur_dir = Step.top(); Step.pop();  //当前坐标的方向
 										 //当前坐标
-			int mx = Step.top(); Step.pop();
-			int my = Step.top(); Step.pop();
+			int mx = m_Man.x;
+			int my = m_Man.y;
 
 			int cur_pic = Step.top(); Step.pop();   //当前坐标cur_dir方向的图片
 			int next_pic = Step.top(); Step.pop();   //前一个坐标以前图片
-			int pre_dir = cur_dir;
+			int pre_dir = Step.top();
 			int dx = DirX[cur_dir];
 			int dy = DirY[cur_dir];
 			m_MiniMap[mx + my * 15] = cur_pic;
 			m_MiniMap[mx + dx+(my + dy)*15] = next_pic;
 			m_MiniMap[mx - dx+(my - dy)*15] = pre_dir + 5;
 			m_Man.x = mx - dx;
-			m_Man.x = my - dy;
+			m_Man.y = my - dy;
 				
 		}
 		break;
@@ -342,14 +358,16 @@ void Game::SpecialKeys(int key,int action)
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 				else
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Land;
-				m_Man.x = manNextX;
-				m_Man.y = manNextY;
+				
 			
 				//将地图中box 的位置置为人
 				m_MiniMap[manNextX + 15 * manNextY] = dir + 5;
 
 				//将地图中land的位置置为box
-				m_MiniMap[manNextX + DirX[dir] + 15 * (manNextY + DirY[dir])] = Box;				
+				m_MiniMap[manNextX + DirX[dir] + 15 * (manNextY + DirY[dir])] = Box;		
+
+				m_Man.x = manNextX;
+				m_Man.y = manNextY;
 
 				PushStack = true;
 				
@@ -360,14 +378,16 @@ void Game::SpecialKeys(int key,int action)
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 				else
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Land;
-				m_Man.x = manNextX;
-				m_Man.y = manNextY;
+				
 
 				//将地图中box 的位置置为人
 
 				m_MiniMap[manNextX + 15 * manNextY] = dir + 5;
 				//将地图中land的位置置为box
 				m_MiniMap[manNextX + DirX[dir] + 15 * (manNextY + DirY[dir])] = FlowerWithBox;
+
+				m_Man.x = manNextX;
+				m_Man.y = manNextY;
 
 				PushStack = true;
 
@@ -394,6 +414,9 @@ void Game::SpecialKeys(int key,int action)
 
 				m_MiniMap[manNextX + DirX[dir] + (manNextY + DirY[dir]) * 15] = Box;
 
+				m_Man.x = manNextX;
+				m_Man.y = manNextY;
+
 				PushStack = true;
 			}
 			else if (Next2 == Flower)
@@ -409,6 +432,9 @@ void Game::SpecialKeys(int key,int action)
 				m_MiniMap[manNextX + manNextY * 15] = dir+5;
 				m_MiniMap[manNextX+DirX[dir] + (manNextY+DirY[dir]) * 15] = FlowerWithBox;
 
+				m_Man.x = manNextX;
+				m_Man.y = manNextY;
+
 				PushStack = true;
 			}
 
@@ -423,13 +449,11 @@ void Game::SpecialKeys(int key,int action)
 		if (PushStack)
 		{				
 			Step.push(Next2);
-			Step.push(Next);
-			Step.push(m_Man.y);
-			Step.push(m_Man.x);
+			Step.push(Next);			
 			Step.push(dir);
 		}
 		
-		IsPass();
+		
 	
 	}
 

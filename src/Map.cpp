@@ -20,8 +20,8 @@ void Map::ReadMap()
     std::ifstream stream(filepath);
     if (!stream)
         std::cout << "can't open file!!!" << std::endl;
-    else
-        std::cout << "success open!!" << std::endl;
+    //else
+     //   std::cout << "success open!!" << std::endl;
     std::string line;
     std::stringstream ss;
 
