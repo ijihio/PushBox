@@ -1,5 +1,5 @@
 #include<iostream>
-#include<Windows.h>
+
 #include"Game.h"
 
 
@@ -59,10 +59,8 @@ int main(void)
 
             glfwSwapBuffers(window);
             glfwPollEvents();
-            if(game.IsPass())
-                 MessageBox(NULL, TEXT("passed,next level?"), TEXT("info"), 1);
-
-
+           
+           
 
         }
     glfwTerminate();

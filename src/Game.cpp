@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include<Windows.h>
 
 const int Game::DirX[4]{ 0,0,-1,1 };
 const int Game::DirY[4]{  1,-1,0,0};
@@ -145,26 +145,9 @@ void Game::DrawMap()
 
 	
 
-
-	if (IsPass())
-	{
 	
-		if (m_Level < MaxLevel)
-		{
-			m_Level += 1;
-
-			delete m_Map;
-			delete m_MiniMap;//int型的map数组
-			delete m_OriginMiniMap;
-
-			m_Map = new Map(m_MapPath, m_Level);
-			m_MiniMap = m_Map->GetMiniMap();
-			m_OriginMiniMap = m_Map->GetMiniMap();
-		}
-
-
-	}
 	
+//	IsPass();
 
 }
 
@@ -183,9 +166,27 @@ bool Game::IsPass()
 	}
 	if (p == 0)
 	{
+		MessageBox(NULL, TEXT("passed,next level?"), TEXT("info"), 1);
+
+		if (m_Level < MaxLevel)
+		{
+
+			m_Level += 1;
+
+			delete m_Map;
+			delete m_MiniMap;//int型的map数组
+			delete m_OriginMiniMap;
+
+			m_Map = new Map(m_MapPath, m_Level);
+			m_MiniMap = m_Map->GetMiniMap();
+			m_OriginMiniMap = m_Map->GetMiniMap();
+			
+		}
 		
 		return true;
 	}
+
+
 }
 
 void Game::keycallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -195,7 +196,13 @@ void Game::keycallback(GLFWwindow* window, int key, int scancode, int action, in
 
 void Game::SpecialKeys(int key,int action)
 {
-	if (action != GLFW_PRESS)
+	//判断，如果按键状态为release，检查是否通过游戏
+	if (action == GLFW_RELEASE)
+	{
+		IsPass();
+		return;
+	}
+	else if (action != GLFW_PRESS)
 		return;
 	switch (key) {
 
@@ -451,6 +458,7 @@ void Game::SpecialKeys(int key,int action)
 			Step.push(Next2);
 			Step.push(Next);			
 			Step.push(dir);
+
 		}
 		
 		
