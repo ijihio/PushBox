@@ -328,7 +328,7 @@ void Game::SpecialKeys(int key,int action)
 		case Land:	//Next is Land
 			//todo:
 			m_MiniMap[manNextX + 15 * manNextY] = dir + 5;
-			if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower)
+			if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower || m_OriginMiniMap[m_Man.x + m_Man.y * 15] == FlowerWithBox)
 				m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 			else 
 				m_MiniMap[m_Man.x + m_Man.y * 15] = Land;
@@ -341,7 +341,7 @@ void Game::SpecialKeys(int key,int action)
 		case Flower:	//Next is Land
 			//todo:
 			m_MiniMap[manNextX + 15 * manNextY] = dir + 5;
-			if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower)
+			if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower|| m_OriginMiniMap[m_Man.x + m_Man.y * 15] == FlowerWithBox )
 				m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 			else
 				m_MiniMap[m_Man.x + m_Man.y * 15] = Land;
@@ -361,7 +361,7 @@ void Game::SpecialKeys(int key,int action)
 				break;				
 			case Land:// Next2 is Land
 				//原来为人的位置恢复原状，且对人的位置进行更新
-				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower)
+				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower || m_OriginMiniMap[m_Man.x + m_Man.y * 15] == FlowerWithBox)
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 				else
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Land;
@@ -381,7 +381,7 @@ void Game::SpecialKeys(int key,int action)
 				break;
 			case Flower://Next2 is Flower
 						//原来为人的位置恢复原状，且对人的位置进行更新
-				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower)
+				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower || m_OriginMiniMap[m_Man.x + m_Man.y * 15] == FlowerWithBox)
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 				else
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Land;
@@ -408,7 +408,7 @@ void Game::SpecialKeys(int key,int action)
 			if (Next2 == Land)
 			{
 				//还原人
-				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower)
+				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower || m_OriginMiniMap[m_Man.x + m_Man.y * 15] == FlowerWithBox)
 				{
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 				}
@@ -428,7 +428,7 @@ void Game::SpecialKeys(int key,int action)
 			}
 			else if (Next2 == Flower)
 			{
-				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower)
+				if (m_OriginMiniMap[m_Man.x + m_Man.y * 15] == Flower || m_OriginMiniMap[m_Man.x + m_Man.y * 15] == FlowerWithBox)
 				{
 					m_MiniMap[m_Man.x + m_Man.y * 15] = Flower;
 				}

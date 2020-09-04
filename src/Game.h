@@ -34,7 +34,7 @@ public:
 	static const int DirX[4];
 	static const int DirY[4];
 	enum {UP,DOWN,LEFT,RIGHT};
-	enum {MinLevel=1,MaxLevel=2};
+	enum {MinLevel=1,MaxLevel=3};
 	enum
 	{
 		BackGround, Land, Wall,FlowerWithBox,Box,ManUp,ManDown,ManLeft,ManRight,Flower
